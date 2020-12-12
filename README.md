@@ -1,4 +1,4 @@
-![Banner](https://docs.visualpinball.org/creators-guide/introduction/jp-header.png)
+  ![Banner](https://docs.visualpinball.org/creators-guide/introduction/jp-header.png)
 # Visual Pinball Engine
 
 *A library that implements world's favorite pinball simulator.*

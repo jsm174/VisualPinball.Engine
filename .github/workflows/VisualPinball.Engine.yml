@@ -1,62 +1,6 @@
 on: [push, pull_request]
 
 jobs:
-  visualpinball-engine-win-x64:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.1.x'
-      - uses: nuget/setup-nuget@v1
-      - name: Build
-        run: dotnet build -c Release -r win-x64
-      - name: Build Contents
-        run: ls -lart VisualPinball.Engine.Test/.bin/Release/netcoreapp3.1
-        shell: bash
-      - name: Test
-        run: dotnet test -r win-x64 /p:CollectCoverage=true /p:CoverletOutputFormat=\"lcov\" /p:CoverletOutput=../lcov /p:ExcludeByAttribute="ExcludeFromCodeCoverageAttribute" /p:Exclude=\"[*]VisualPinball.Engine.Math.Triangulator.*,[VisualPinball.Resources]*,[*]VisualPinball.Engine.VPT.Plunger.*\"
-        # local report:
-        #  dotnet test -r win-x64 /p:CollectCoverage=true /p:CoverletOutputFormat=\"opencover\" /p:CoverletOutput=../lcov /p:ExcludeByAttribute="ExcludeFromCodeCoverageAttribute" /p:Exclude=\"[*]VisualPinball.Engine.Math.Triangulator.*,[VisualPinball.Resources]*,[*]VisualPinball.Engine.VPT.Plunger.*\"
-        #  dotnet tool install -g dotnet-reportgenerator-globaltool
-        #  reportgenerator -reports:lcov.opencover.xml -targetdir:coveragereport -reporttypes:Html
-        shell: cmd
-      - name: Publish Coverage
-        run: bash <(curl -s https://codecov.io/bash)
-        shell: bash
-
-  visualpinball-engine-win-x86:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.1.x'
-      - uses: nuget/setup-nuget@v1
-      - name: Build
-        run: dotnet build -c Release -r win-x86
-      - name: Build Contents
-        run: ls -lart VisualPinball.Engine.Test/.bin/Release/netcoreapp3.1
-        shell: bash
-      - name: Test
-        run: dotnet test -r win-x86
-        shell: bash
-
-  visualpinball-engine-osx-x64:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.1.x'
-      - uses: nuget/setup-nuget@v1
-      - name: Build
-        run: dotnet build -c Release -r osx-x64
-      - name: Build Contents
-        run: ls -lart VisualPinball.Engine.Test/.bin/Release/netcoreapp3.1
-      - name: Test
-        run: dotnet test -r osx-x64
-
   visualpinball-engine-linux-x64:
     runs-on: ubuntu-latest
     steps:
@@ -71,3 +15,30 @@ jobs:
         run: ls -lart VisualPinball.Engine.Test/.bin/Release/netcoreapp3.1
       - name: Test
         run: dotnet test -r linux-x64
+
+  deploy:
+     needs: [visualpinball-engine-linux-x64]
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v2
+       - name: Add Meta Files
+         run: |
+           echo "fileFormatVersion: 2\nguid: 766a31c3b9f34ab0885c9eb91f7b1fe4" > package.json.meta
+           echo "fileFormatVersion: 2\nguid: adae7347fead42e782a1276d30931a41" > LICENSE.meta
+           echo "fileFormatVersion: 2\nguid: 72a46a663e3b40d0b6e8ff25d554a779" > README.md.meta
+           echo "fileFormatVersion: 2\nguid: a2951ed31fba458ca06c535598194a28" > CHANGELOG.md.meta
+           echo "fileFormatVersion: 2\nguid: 931f3c49f79d4032bceefe14682a7d5a" > VisualPinball.Unity.meta
+           echo "fileFormatVersion: 2\nguid: ea4f7f8d4c2c418e9fc0fbed8ab1f5a9" > VisualPinball.Engine.meta
+       - name: Release 
+         run: |
+           git config user.name github-actions
+           git config user.email github-actions@github.com
+           mkdir ~/.npm-global
+           npm config set prefix '~/.npm-global'
+           PATH=~/.npm-global/bin:$PATH
+           npm install -g release-it @release-it/keep-a-changelog 
+           echo "//registry.visualpinball.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+           #release-it --ci --preRelease 
+         env:
+           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+           GITHUB_TOKEN: ${{ secrets.REPO_PAT }}

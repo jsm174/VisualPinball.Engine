@@ -1,0 +1,12 @@
+{
+  "git": {
+    "commitMessage": "chore: release v${version}",
+    "requireCleanWorkingDir": false
+  },
+  "github": {
+    "release": true
+  },
+  "hooks": {
+    "after:bump": "npx auto-changelog -p --template keepachangelog --sort-commits date-desc --commit-limit false --ignore-commit-pattern \"chore: release v*\""
+  }
+}
