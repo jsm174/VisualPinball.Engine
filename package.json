@@ -3,7 +3,7 @@
     "registry": "https://registry.visualpinball.org"
   },
   "name": "org.visualpinball.engine.unity",
-  "version": "0.0.0",
+  "version": "0.1.0-preview.0",
   "displayName": "Visual Pinball Engine",
   "description": "Work In Progress!",
   "unity": "2020.2",
