@@ -15,3 +15,4 @@ jobs:
           echo "${{ github.event.workflow_run.conclusion }}"
           echo "${{ github.event_name }}"
           echo "${{ github.ref }}"
+          echo "${{ github.event.workflow_run }}"
