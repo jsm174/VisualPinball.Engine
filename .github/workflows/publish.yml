@@ -9,3 +9,5 @@ on:
 jobs:
   dump:
     runs-on: ubuntu-latest
+    steps:
+      - run: echo "HI"
