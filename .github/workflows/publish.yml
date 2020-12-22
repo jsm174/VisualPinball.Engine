@@ -11,6 +11,4 @@ jobs:
     steps:
       - name: Dump
         run: |
-          echo "${{ github.event.workflow_run.conclusion }}"
-          echo "${{ github.event_name }}"
-          echo "${{ github.ref }}"
+          echo "Hello"
