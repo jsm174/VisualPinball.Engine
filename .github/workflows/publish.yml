@@ -1,10 +1,10 @@
 name: Workflow2
 on:
   workflow_run:
-    workflows: ["Workflow1"]
+    workflows: 
+      - Workflow1
     types: 
       - completed
-      - requested
 
 jobs:
   dump:
