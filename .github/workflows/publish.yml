@@ -15,8 +15,8 @@ jobs:
           echo "${{ github.event.workflow_run.conclusion }}"
           echo "${{ github.event_name }}"
           echo "${{ github.ref }}"
-          echo "${{ CONTEXT1 }}"
-          echo "${{ CONTEXT2 }}"
+          echo "$CONTEXT1"
+          echo "$CONTEXT2"
         env:
           CONTEXT1: ${{ toJson(github.event.workflow_run) }}
           CONTEXT2: ${{ toJson(github) }}
