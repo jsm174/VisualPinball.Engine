@@ -9,10 +9,11 @@ jobs:
   dump:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-        echo " ${{ github.event.workflow_run.conclusion }} "
-        echo " ${{ github.event_name }} "
-        echo " ${{ github.ref }} "
+      - name: Dump
+        run: |
+          echo "${{ github.event.workflow_run.conclusion }}"
+          echo "${{ github.event_name }}"
+          echo "${{ github.ref }}"
 
   publish:
     runs-on: ubuntu-latest
