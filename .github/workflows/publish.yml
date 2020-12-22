@@ -6,6 +6,14 @@ on:
       - completed
 
 jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+        echo " ${{ github.event.workflow_run.conclusion }} "
+        echo " ${{ github.event_name }} "
+        echo " ${{ github.ref }} "
+
   publish:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event_name == 'push' && github.ref == 'refs/heads/master' }}
