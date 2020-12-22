@@ -10,5 +10,8 @@ jobs:
   dump:
     runs-on: ubuntu-latest
     steps:
-      - name: Build Contents
-        run: echo "HI"
+      - name: Dump
+        run: |
+          echo "${{ github.event.workflow_run.conclusion }}"
+          echo "${{ github.event_name }}"
+          echo "${{ github.ref }}"
