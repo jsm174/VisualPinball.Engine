@@ -2,13 +2,10 @@ name: Workflow2
 on:
   workflow_run:
     workflows: ["Workflow1"]
-    types:
+    types: 
       - completed
+      - requested
 
 jobs:
   dump:
     runs-on: ubuntu-latest
-    steps:
-      - name: Dump
-        run: |
-          echo "Hello"
