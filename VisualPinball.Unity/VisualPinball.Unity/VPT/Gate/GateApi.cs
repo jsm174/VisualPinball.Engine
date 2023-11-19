@@ -97,11 +97,15 @@ namespace VisualPinball.Unity
 
 		#region Collider Generation
 
-		protected override void CreateColliders(ref ColliderReference colliders,
-			ref ColliderReference kinematicColliders, float margin)
+		protected override void CreateColliders(ref ColliderReference colliders, ref ColliderReference kinematicColliders, float margin)
 		{
-			var colliderGenerator = new GateColliderGenerator(this, MainComponent, ColliderComponent);
-			colliderGenerator.GenerateColliders(MainComponent.PositionZ, ref colliders);
+			var matrix = MainComponent.transform.worldToLocalMatrix.WorldToLocalTranslateWithinPlayfield(Player.PlayfieldToWorldMatrix);
+			var colliderGenerator = new GateColliderGenerator(this, MainComponent, ColliderComponent, matrix);
+			if (ColliderComponent._isKinematic) {
+				colliderGenerator.GenerateColliders(MainComponent.PositionZ, ref kinematicColliders);
+			} else {
+				colliderGenerator.GenerateColliders(MainComponent.PositionZ, ref colliders);
+			}
 		}
 
 		#endregion
